@@ -16,8 +16,13 @@ def save_webpages(page):
 
 
 def run():
+    
+    # Save all webpages
     for page in range(1, 14):
         save_webpages(page)
+    
+    
+    
     return 
 
 

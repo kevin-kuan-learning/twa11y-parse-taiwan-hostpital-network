@@ -10,8 +10,8 @@ https://www.medicaltravel.org.tw/Hospital-List.aspx?position=0&l=2&p=1&name=&med
 Tasks:
 - [v] Parse website links
 - [v] Verify each website is accessble (200)
-- [ ] Check if any missing hospitals by cross-referencing wikipedia
-- [ ] Label all medical centers
+- [v] Check if any missing hospitals by cross-referencing wikipedia
+- [v] Label all medical centers
 
 
 Wiki Link:

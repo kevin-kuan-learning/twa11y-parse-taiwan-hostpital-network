@@ -36,10 +36,13 @@ def run():
         etree = load_webpage(page)
         hospital_titution_list_div = etree.xpath("//div[contains(@class, 'hospital-titution-list')]")[0]
         for h_li in hospital_titution_list_div.xpath("./ul/li"):
-            hospital_name = h_li.xpath('.//h3/text()')[0]
-            hospital_link = h_li.xpath('.//div[contains(@class, "hospital-titution-Information")]//a/@href')[0]
-            hospital_names.append(hospital_name)
-            hospital_links.append(hospital_link)
+            try:
+                hospital_name = h_li.xpath('.//h3/text()')[0]
+                hospital_link = h_li.xpath('.//div[contains(@class, "hospital-titution-Information")]//a/@href')[0]
+                hospital_names.append(hospital_name)
+                hospital_links.append(hospital_link)
+            except Exception as e:
+                print(e)
 
         df = pd.DataFrame({
             'name': hospital_names,

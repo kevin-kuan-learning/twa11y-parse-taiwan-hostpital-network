@@ -29,28 +29,42 @@ def run():
         # save_webpages(page)
     
     # Parse webpages for "hospital name", "website link"
-    hospital_names = []
-    hospital_links = []
+    # hospital_names = []
+    # hospital_links = []
     
-    for page in range(1, 14):
-        etree = load_webpage(page)
-        hospital_titution_list_div = etree.xpath("//div[contains(@class, 'hospital-titution-list')]")[0]
-        for h_li in hospital_titution_list_div.xpath("./ul/li"):
-            try:
-                hospital_name = h_li.xpath('.//h3/text()')[0]
-                hospital_link = h_li.xpath('.//div[contains(@class, "hospital-titution-Information")]//a/@href')[0]
-                hospital_names.append(hospital_name)
-                hospital_links.append(hospital_link)
-            except Exception as e:
-                print(e)
+    # for page in range(1, 14):
+    #     etree = load_webpage(page)
+    #     hospital_titution_list_div = etree.xpath("//div[contains(@class, 'hospital-titution-list')]")[0]
+    #     for h_li in hospital_titution_list_div.xpath("./ul/li"):
+    #         try:
+    #             hospital_name = h_li.xpath('.//h3/text()')[0]
+    #             hospital_link = h_li.xpath('.//div[contains(@class, "hospital-titution-Information")]//a/@href')[0]
+    #             hospital_names.append(hospital_name)
+    #             hospital_links.append(hospital_link)
+    #         except Exception as e:
+    #             print(e)
 
-        df = pd.DataFrame({
-            'name': hospital_names,
-            'link': hospital_links
-        })   
+    #     df = pd.DataFrame({
+    #         'name': hospital_names,
+    #         'link': hospital_links
+    #     })   
     
-    df.to_csv('hospital_links.csv')
-    df.to_json('hospital_links.jsonl', orient='records', lines=True)
+    # df.to_csv('hospital_links.csv')
+    # df.to_json('hospital_links.jsonl', orient='records', lines=True)
+
+    # Test hospital links
+    df = pd.read_csv("hospital_links.csv", header=0)
+    for index, row in df.iterrows():
+        name = row['name']
+        link = row['link']
+        try:
+            resp = requests.get(link)
+        except requests.ConnectionError as e:
+            print(name, e)
+        except requests.RequestException as e:
+            print(name, e)
+        except requests.HTTPError as e:
+            print(name, e)
 
     return 
 

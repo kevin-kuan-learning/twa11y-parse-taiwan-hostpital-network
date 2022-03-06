@@ -1,6 +1,7 @@
 import requests
 from lxml import html
 import re
+import pandas as pd
 
 
 def save_webpages(page):
@@ -15,14 +16,39 @@ def save_webpages(page):
         f.write(resp.text)
 
 
+def load_webpage(page):
+    path = "html_response\\page_%d.html" % page
+    with open(path, 'r', encoding='utf8') as f:
+        return html.fromstring(f.read())
+
+
 def run():
     
     # Save all webpages
+    # for page in range(1, 14):
+        # save_webpages(page)
+    
+    # Parse webpages for "hospital name", "website link"
+    hospital_names = []
+    hospital_links = []
+    
     for page in range(1, 14):
-        save_webpages(page)
+        etree = load_webpage(page)
+        hospital_titution_list_div = etree.xpath("//div[contains(@class, 'hospital-titution-list')]")[0]
+        for h_li in hospital_titution_list_div.xpath("./ul/li"):
+            hospital_name = h_li.xpath('.//h3/text()')[0]
+            hospital_link = h_li.xpath('.//div[contains(@class, "hospital-titution-Information")]//a/@href')[0]
+            hospital_names.append(hospital_name)
+            hospital_links.append(hospital_link)
+
+        df = pd.DataFrame({
+            'name': hospital_names,
+            'link': hospital_links
+        })   
     
-    
-    
+    df.to_csv('hospital_links.csv')
+    df.to_json('hospital_links.jsonl', orient='records', lines=True)
+
     return 
 
 
